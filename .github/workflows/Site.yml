@@ -33,5 +33,4 @@ jobs:
       # Site Publish
       - run: mvn clean site site:stage scm-publish:publish-scm -P site
         env:
-          GITHUB_USERNAME: ${{ secrets.CONTRIBUTOR_USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.CONTRIBUTOR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.secrets.GITHUB_TOKEN }}
