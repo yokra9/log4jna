@@ -27,8 +27,9 @@ jobs:
           java-version: ${{ matrix.java }}
 
       # Set git config user
-      - run: git config --global user.name github-actions[bot]
-      - run: git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+      - run: |
+          git config --global user.name github-actions[bot]
+          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
 
       # Site Publish
       - run: mvn clean site site:stage scm-publish:publish-scm -P site
