@@ -1,0 +1,37 @@
+name: Log4JNA Site Publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        java: ["8"]
+        distribution: ["temurin"]
+
+    runs-on: "windows-2019"
+
+    name: Java ${{ matrix.java }} ( ${{ matrix.distribution }} )
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # configuring Developer Command Prompt for Microsoft Visual C++
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      # Setup JDK
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ matrix.distribution }}
+          java-version: ${{ matrix.java }}
+
+      # Set git config user
+      - run: git config --global user.name github-actions[bot]
+      - run: git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      # Site Publish
+      - run: mvn clean site site:stage scm-publish:publish-scm -P site
+        env:
+          GITHUB_USERNAME: ${{ secrets.CONTRIBUTOR_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.CONTRIBUTOR_TOKEN }}
